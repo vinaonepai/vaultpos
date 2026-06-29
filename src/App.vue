@@ -7,8 +7,11 @@
 <script setup lang="ts">
 import { IonApp, IonRouterOutlet } from '@ionic/vue';
 import { onMounted } from 'vue'
-import { useAuthStore } from '@/stores/auth.store'
+import { supabase } from '@/supabase/client'
 
-const authStore = useAuthStore()
-onMounted(() => authStore.init())
+onMounted(async () => {
+  const { data, error } = await supabase.from('empresas').select('*')
+  console.log('✅ Conexão OK:', data)
+  console.log('❌ Erro:', error)
+})
 </script>
