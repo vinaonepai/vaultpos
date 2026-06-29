@@ -13,7 +13,7 @@ export type CargoUsuario = 'admin' | 'garcom'
 // ENTIDADES (rows do banco)
 // ============================================================
 
-export interface Empresa {
+export type Empresa = {
   id: string
   nome: string
   cnpj: string | null
@@ -26,7 +26,7 @@ export interface Empresa {
   criado_em: string
 }
 
-export interface Configuracao {
+export type Configuracao = {
   id: string
   empresa_id: string
   nome_fantasia: string | null
@@ -37,11 +37,11 @@ export interface Configuracao {
   aceita_pix: boolean
   aceita_cartao: boolean
   aceita_dinheiro: boolean
-  horario_funcionamento: Record<string, any> | null
+  horario_funcionamento: Record<string, unknown> | null
   criado_em: string
 }
 
-export interface Usuario {
+export type Usuario = {
   id: string
   empresa_id: string
   nome: string
@@ -54,7 +54,7 @@ export interface Usuario {
   criado_em: string
 }
 
-export interface Cliente {
+export type Cliente = {
   id: string
   empresa_id: string
   nome: string
@@ -63,7 +63,7 @@ export interface Cliente {
   criado_em: string
 }
 
-export interface Categoria {
+export type Categoria = {
   id: string
   empresa_id: string
   nome: string
@@ -71,7 +71,7 @@ export interface Categoria {
   ativo: boolean
 }
 
-export interface Produto {
+export type Produto = {
   id: string
   empresa_id: string
   categoria_id: string | null
@@ -88,7 +88,7 @@ export interface Produto {
   criado_em: string
 }
 
-export interface Comanda {
+export type Comanda = {
   id: string
   empresa_id: string
   cliente_id: string | null
@@ -104,7 +104,7 @@ export interface Comanda {
   fechada_em: string | null
 }
 
-export interface ItemComanda {
+export type ItemComanda = {
   id: string
   comanda_id: string
   produto_id: string
@@ -113,7 +113,7 @@ export interface ItemComanda {
   subtotal: number
 }
 
-export interface Pagamento {
+export type Pagamento = {
   id: string
   empresa_id: string
   comanda_id: string
@@ -124,7 +124,7 @@ export interface Pagamento {
   data_pagamento: string
 }
 
-export interface MovimentacaoEstoque {
+export type MovimentacaoEstoque = {
   id: string
   empresa_id: string
   produto_id: string
@@ -139,34 +139,34 @@ export interface MovimentacaoEstoque {
 // TIPOS COM RELAÇÕES (joins)
 // ============================================================
 
-export interface ProdutoComCategoria extends Produto {
+export type ProdutoComCategoria = Produto & {
   categorias: Pick<Categoria, 'id' | 'nome'> | null
 }
 
-export interface ItemComandaComProduto extends ItemComanda {
+export type ItemComandaComProduto = ItemComanda & {
   produtos: Pick<Produto, 'id' | 'nome' | 'imagem'> | null
 }
 
-export interface ComandaComRelacoes extends Comanda {
+export type ComandaComRelacoes = Comanda & {
   clientes: Pick<Cliente, 'id' | 'nome' | 'telefone'> | null
   usuarios: Pick<Usuario, 'id' | 'nome'> | null
 }
 
-export interface ComandaDetalhada extends ComandaComRelacoes {
+export type ComandaDetalhada = ComandaComRelacoes & {
   itens_comanda: ItemComandaComProduto[]
 }
 
-export interface PagamentoComRelacoes extends Pagamento {
+export type PagamentoComRelacoes = Pagamento & {
   comandas: Pick<Comanda, 'id' | 'mesa'> | null
   usuarios: Pick<Usuario, 'id' | 'nome'> | null
 }
 
-export interface MovimentacaoComRelacoes extends MovimentacaoEstoque {
+export type MovimentacaoComRelacoes = MovimentacaoEstoque & {
   produtos: Pick<Produto, 'id' | 'nome'> | null
   usuarios: Pick<Usuario, 'id' | 'nome'> | null
 }
 
-export interface EmpresaComConfiguracoes extends Empresa {
+export type EmpresaComConfiguracoes = Empresa & {
   configuracoes: Configuracao | null
 }
 
@@ -189,16 +189,20 @@ export type UpdateCategoria = Partial<Omit<Categoria, 'id' | 'empresa_id'>>
 export type CreateProduto = Omit<Produto, 'id' | 'criado_em'>
 export type UpdateProduto = Partial<Omit<Produto, 'id' | 'criado_em' | 'empresa_id'>>
 
-export type CreateComanda = Omit<Comanda, 'id' | 'criada_em' | 'fechada_em' | 'subtotal' | 'desconto' | 'taxa_servico' | 'total' | 'status'>
+export type CreateComanda =
+  Pick<Comanda, 'empresa_id'> &
+  Partial<Pick<Comanda, 'cliente_id' | 'garcom_id' | 'mesa' | 'observacoes' | 'status' | 'subtotal' | 'desconto' | 'taxa_servico' | 'total' | 'fechada_em'>>
 export type UpdateComanda = Partial<Omit<Comanda, 'id' | 'criada_em' | 'empresa_id'>>
 
-export type CreateItemComanda = Omit<ItemComanda, 'id' | 'subtotal'>
+export type CreateItemComanda = Omit<ItemComanda, 'id' | 'subtotal'> & Partial<Pick<ItemComanda, 'subtotal'>>
 export type UpdateItemComanda = Partial<Pick<ItemComanda, 'quantidade' | 'subtotal'>>
 
-export type CreatePagamento = Omit<Pagamento, 'id' | 'data_pagamento'>
+export type CreatePagamento = Omit<Pagamento, 'id' | 'data_pagamento' | 'status'> & Partial<Pick<Pagamento, 'status'>>
 export type UpdatePagamento = Partial<Pick<Pagamento, 'status'>>
 
-export type CreateMovimentacao = Omit<MovimentacaoEstoque, 'id' | 'data'>
+export type CreateMovimentacao =
+  Omit<MovimentacaoEstoque, 'id' | 'data' | 'usuario_id' | 'motivo'> &
+  Partial<Pick<MovimentacaoEstoque, 'usuario_id' | 'motivo'>>
 
 export type CreateConfiguracao = Omit<Configuracao, 'id' | 'criado_em'>
 export type UpdateConfiguracao = Partial<Omit<Configuracao, 'id' | 'criado_em' | 'empresa_id'>>
@@ -214,52 +218,66 @@ export interface Database {
         Row: Empresa
         Insert: CreateEmpresa
         Update: UpdateEmpresa
+        Relationships: []
       }
       configuracoes: {
         Row: Configuracao
         Insert: CreateConfiguracao
         Update: UpdateConfiguracao
+        Relationships: []
       }
       usuarios: {
         Row: Usuario
         Insert: CreateUsuario
         Update: UpdateUsuario
+        Relationships: []
       }
       clientes: {
         Row: Cliente
         Insert: CreateCliente
         Update: UpdateCliente
+        Relationships: []
       }
       categorias: {
         Row: Categoria
         Insert: CreateCategoria
         Update: UpdateCategoria
+        Relationships: []
       }
       produtos: {
         Row: Produto
         Insert: CreateProduto
         Update: UpdateProduto
+        Relationships: []
       }
       comandas: {
         Row: Comanda
         Insert: CreateComanda
         Update: UpdateComanda
+        Relationships: []
       }
       itens_comanda: {
         Row: ItemComanda
         Insert: CreateItemComanda
         Update: UpdateItemComanda
+        Relationships: []
       }
       pagamentos: {
         Row: Pagamento
         Insert: CreatePagamento
         Update: UpdatePagamento
+        Relationships: []
       }
       movimentacoes_estoque: {
         Row: MovimentacaoEstoque
         Insert: CreateMovimentacao
         Update: never
+        Relationships: []
       }
     }
+    Views: Record<string, never>
+    Functions: Record<string, never>
+    Enums: Record<string, never>
+    CompositeTypes: Record<string, never>
   }
 }

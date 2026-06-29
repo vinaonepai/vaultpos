@@ -30,7 +30,7 @@ export const useUserStore = defineStore('user', () => {
   // Busca os dados do usuário logado na tabela usuarios
   async function fetchUsuarioLogado() {
     const authStore = useAuthStore()
-    if (!authStore.userId) return
+    if (!authStore.userId || !authStore.userEmail) return
 
     loading.value = true
     error.value = null

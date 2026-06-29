@@ -1,7 +1,7 @@
 import { supabase } from '../client'
 import type {
   Comanda, ComandaComRelacoes, ComandaDetalhada,
-  ItemComanda, ItemComandaComProduto,
+  ItemComanda,
   CreateComanda, UpdateComanda, CreateItemComanda,
   StatusComanda
 } from '@/types/database.types'
