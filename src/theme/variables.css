@@ -1,2 +1,175 @@
-/* For information on how to create your own theme, please refer to:
-http://ionicframework.com/docs/theming/ */
+:root {
+  --ion-color-primary: #ff7a1a;
+  --ion-color-primary-rgb: 255, 122, 26;
+  --ion-color-secondary: #ffb347;
+  --ion-color-secondary-rgb: 255, 179, 71;
+  --ion-color-tertiary: #ff5a1f;
+  --ion-color-tertiary-rgb: 255, 90, 31;
+  --ion-color-success: #22c55e;
+  --ion-color-warning: #f59e0b;
+  --ion-color-danger: #fb7185;
+  --ion-color-dark: #050505;
+  --ion-color-medium: #9ca3af;
+  --ion-color-light: #f8fafc;
+
+  --ion-background-color: #040404;
+  --ion-background-color-rgb: 4, 4, 4;
+  --ion-text-color: #f8fafc;
+  --ion-text-color-rgb: 248, 250, 252;
+  --ion-border-color: rgba(255, 122, 26, 0.18);
+  --ion-item-background: rgba(16, 16, 16, 0.86);
+  --ion-card-background: rgba(12, 12, 12, 0.9);
+  --ion-toolbar-background: rgba(8, 8, 8, 0.92);
+  --ion-card-color: var(--ion-text-color);
+  --ion-item-border-color: rgba(255, 122, 26, 0.18);
+  --ion-toolbar-color: #f8fafc;
+
+  --app-glow: rgba(255, 122, 26, 0.22);
+  --app-glow-strong: rgba(255, 179, 71, 0.2);
+}
+
+html, body {
+  background: radial-gradient(circle at top left, #1a120d 0%, #060606 45%, #020202 100%);
+  color: var(--ion-text-color);
+  font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  inset: auto;
+  width: 24rem;
+  height: 24rem;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+}
+
+body::before {
+  top: -6rem;
+  left: -6rem;
+  background: radial-gradient(circle, var(--app-glow) 0%, transparent 70%);
+}
+
+body::after {
+  right: -5rem;
+  bottom: -6rem;
+  background: radial-gradient(circle, var(--app-glow-strong) 0%, transparent 70%);
+}
+
+ion-app {
+  background: transparent;
+}
+
+ion-content {
+  --background: transparent;
+  --color: var(--ion-text-color);
+}
+
+ion-page {
+  position: relative;
+  z-index: 1;
+}
+
+ion-header,
+ion-toolbar,
+ion-tab-bar,
+ion-card,
+ion-item,
+ion-list,
+ion-searchbar,
+ion-input,
+ion-textarea,
+ion-select,
+ion-datetime,
+ion-modal,
+ion-alert {
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+ion-toolbar {
+  --background: var(--ion-toolbar-background);
+  --color: var(--ion-toolbar-color);
+  border-bottom: 1px solid var(--ion-border-color);
+  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.35);
+}
+
+ion-card {
+  background: var(--ion-card-background);
+  color: var(--ion-text-color);
+  border: 1px solid rgba(255, 122, 26, 0.2);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  border-radius: 24px;
+}
+
+ion-item,
+ion-list {
+  background: var(--ion-item-background);
+  color: var(--ion-text-color);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 122, 26, 0.14);
+}
+
+ion-button {
+  --background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-tertiary));
+  --background-hover: linear-gradient(135deg, #ff8f3d, #ff6b1f);
+  --color: #050505;
+  --border-radius: 999px;
+  font-weight: 700;
+  box-shadow: 0 14px 30px rgba(255, 122, 26, 0.24);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+ion-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 36px rgba(255, 122, 26, 0.3);
+}
+
+ion-input,
+ion-textarea,
+ion-select,
+ion-searchbar {
+  --background: rgba(18, 18, 18, 0.9);
+  --color: var(--ion-text-color);
+  --placeholder-color: #9ca3af;
+  --highlight-color-focused: var(--ion-color-primary);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 122, 26, 0.18);
+}
+
+ion-tab-bar {
+  --background: rgba(2, 6, 23, 0.88);
+  --color: #94a3b8;
+  --color-selected: var(--ion-color-primary);
+  border-top: 1px solid var(--ion-border-color);
+}
+
+ion-modal,
+ion-alert {
+  --background: rgba(2, 6, 23, 0.95);
+  --color: var(--ion-text-color);
+}
+
+ion-chip {
+  background: rgba(103, 232, 249, 0.16);
+  color: var(--ion-color-primary);
+  border: 1px solid rgba(103, 232, 249, 0.25);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--ion-color-primary), var(--ion-color-secondary));
+  border-radius: 999px;
+}

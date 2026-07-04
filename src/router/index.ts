@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
+import { useAuthStore } from '@/stores/auth.store';
 
 import TabsAdmin from '../views/TabsAdmin.vue';
 import TabsGarcom from '../views/TabsGarcom.vue';
+import HomePage from '../pages/HomePage.vue';
 import LoginPage from '../pages/auth/LoginPage.vue';
 import RegisterPage from '../pages/auth/RegisterPage.vue';
 import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage.vue';
@@ -31,6 +33,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/login',
     name: 'Login',
     component: LoginPage
+  },
+  {
+    path: '/home',
+    name: 'Home',
+    component: HomePage
   },
   {
     path: '/register',
@@ -142,6 +149,36 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
+})
+
+router.beforeEach(async (to) => {
+  const auth = useAuthStore()
+
+  if (!auth.initialized) {
+    try {
+      await auth.init()
+    } catch (error) {
+      console.error('Erro ao inicializar guarda de rota:', error)
+    }
+  }
+
+  const isPublicRoute = to.path === '/' || to.path === '/login' || to.path === '/register' || to.path === '/forgot-password' || to.path === '/home'
+  const isPrivateRoute = to.path.startsWith('/admin') || to.path.startsWith('/garcom')
+  const isAdminRoute = to.path.startsWith('/admin')
+
+  if (!auth.isAuthenticated && isPrivateRoute) {
+    return '/login'
+  }
+
+  if (auth.isAuthenticated && isPublicRoute) {
+    return auth.isAdmin ? '/admin/dashboard' : '/home'
+  }
+
+  if (auth.isAuthenticated && isAdminRoute && !auth.isAdmin) {
+    return '/home'
+  }
+
+  return true
 })
 
 export default router

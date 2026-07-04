@@ -5,13 +5,18 @@
 </template>
 
 <script setup lang="ts">
-import { IonApp, IonRouterOutlet } from '@ionic/vue';
+import { IonApp, IonRouterOutlet } from '@ionic/vue'
 import { onMounted } from 'vue'
-import { supabase } from '@/supabase/client'
+import { useAuthStore } from '@/stores/auth.store'
+
+const auth = useAuthStore()
 
 onMounted(async () => {
-  const { data, error } = await supabase.from('empresas').select('*')
-  console.log('✅ Conexão OK:', data)
-  console.log('❌ Erro:', error)
+  try {
+    await auth.init()
+  } catch (error) {
+    console.error('Erro ao inicializar autenticação:', error)
+  }
 })
 </script>
+
