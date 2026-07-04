@@ -98,7 +98,7 @@
             <div class="method-list">
               <div class="method-row">
                 <div class="method-left">
-                  <ion-icon :icon="buildOutline" class="method-icon" />
+                  <ion-icon :icon="cubeOutline" class="method-icon" />
 
                   <div>
                     <div class="method-name">Pix</div>
@@ -226,7 +226,6 @@ import {
   cubeOutline,
   personCircleOutline,
   cashOutline,
-  buildOutline,
 
   cardOutline,
 
