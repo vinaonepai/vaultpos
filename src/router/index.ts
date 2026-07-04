@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import { useAuthStore } from '@/stores/auth.store';
+import { useUserStore } from '@/stores/user.store';
 
 import TabsAdmin from '../views/TabsAdmin.vue';
 import TabsGarcom from '../views/TabsGarcom.vue';
@@ -177,9 +178,35 @@ router.beforeEach(async (to) => {
     return '/login'
   }
 
+  // Garante que os dados do usuário logado (nome/empresa) estejam carregados
+  if (auth.isAuthenticated) {
+    const userStore = useUserStore()
+    if (!userStore.usuario) {
+      await userStore.fetchUsuarioLogado()
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   if (!auth.isAuthenticated && isPublicRoute && to.path !== '/') {
+
     return true
   }
+
+
 
   if (!auth.isAuthenticated && to.path === '/') {
     return '/login'
