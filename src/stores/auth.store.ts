@@ -3,6 +3,12 @@ import { ref, computed } from "vue";
 import { supabase } from "@/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
 
+// ATENÇÃO: Sistema de autenticação híbrido.
+// 1) Primeiro tenta autenticar com usuários fixos salvos em localStorage (modo mock/dev).
+// 2) Se não encontrar, tenta autenticação real via Supabase (signInWithPassword).
+// Revisar antes de ir para produção: usuários locais não existem na tabela de usuários 
+// do Supabase e podem causar erros em queries que dependem de user.id real.
+
 interface LocalUser {
   email: string;
   password: string;

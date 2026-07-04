@@ -16,6 +16,7 @@ import ProdutosPage from '../pages/admin/ProdutosPage.vue';
 import RelatoriosPage from '../pages/admin/RelatoriosPage.vue';
 import UsuariosPage from '../pages/admin/UsuariosPage.vue';
 import ConfiguracoesPage from '../pages/admin/ConfiguracoesPage.vue';
+import MaisPage from '../pages/admin/MaisPage.vue';
 import DashboardGarcom from '../pages/garcom/DashboardGarcom.vue';
 import ComandasPage from '../pages/garcom/ComandasPage.vue';
 import ComandaDetalhesPage from '../pages/garcom/ComandaDetalhesPage.vue';
@@ -96,6 +97,11 @@ const routes: Array<RouteRecordRaw> = [
         path: 'configuracoes',
         name: 'AdminConfiguracoes',
         component: ConfiguracoesPage
+      },
+      {
+        path: 'mais',
+        name: 'AdminMais',
+        component: MaisPage
       }
     ]
   },
@@ -162,12 +168,25 @@ router.beforeEach(async (to) => {
     }
   }
 
-  const isPublicRoute = to.path === '/' || to.path === '/login' || to.path === '/register' || to.path === '/forgot-password' || to.path === '/home'
+  const isPublicRoute = to.path === '/' || to.path === '/login' || to.path === '/register' || to.path === '/forgot-password'
   const isPrivateRoute = to.path.startsWith('/admin') || to.path.startsWith('/garcom')
   const isAdminRoute = to.path.startsWith('/admin')
+  const isAuthRoute = to.path === '/home'
 
   if (!auth.isAuthenticated && isPrivateRoute) {
     return '/login'
+  }
+
+  if (!auth.isAuthenticated && isPublicRoute && to.path !== '/') {
+    return true
+  }
+
+  if (!auth.isAuthenticated && to.path === '/') {
+    return '/login'
+  }
+
+  if (auth.isAuthenticated && to.path === '/') {
+    return auth.isAdmin ? '/admin/dashboard' : '/home'
   }
 
   if (auth.isAuthenticated && isPublicRoute) {
@@ -176,6 +195,10 @@ router.beforeEach(async (to) => {
 
   if (auth.isAuthenticated && isAdminRoute && !auth.isAdmin) {
     return '/home'
+  }
+
+  if (auth.isAuthenticated && isAuthRoute) {
+    return true
   }
 
   return true

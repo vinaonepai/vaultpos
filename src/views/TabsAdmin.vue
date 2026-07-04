@@ -23,9 +23,9 @@
         <ion-label>Financeiro</ion-label>
       </ion-tab-button>
 
-      <ion-tab-button tab="admin-configuracoes" href="/admin/configuracoes">
-        <ion-icon :icon="settingsOutline" />
-        <ion-label>Ajustes</ion-label>
+      <ion-tab-button tab="admin-mais" href="/admin/mais">
+        <ion-icon :icon="appsOutline" />
+        <ion-label>Mais</ion-label>
       </ion-tab-button>
     </ion-tab-bar>
   </ion-tabs>
@@ -45,6 +45,6 @@ import {
   cashOutline,
   cubeOutline,
   gridOutline,
-  settingsOutline
+  appsOutline,
 } from 'ionicons/icons';
 </script>
