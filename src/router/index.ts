@@ -150,6 +150,14 @@ const routes: Array<RouteRecordRaw> = [
         component: PerfilPage
       }
     ]
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: () => {
+      const auth = useAuthStore()
+      if (!auth.isAuthenticated) return '/login'
+      return auth.isAdmin ? '/admin/dashboard' : '/home'
+    }
   }
 ]
 
