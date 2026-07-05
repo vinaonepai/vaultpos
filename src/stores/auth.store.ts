@@ -123,9 +123,17 @@ export const useAuthStore = defineStore("auth", () => {
     supabase.auth.onAuthStateChange((_event, newSession) => {
       if (newSession) {
         persistSession(newSession, newSession.user);
-      } else {
-        persistSession(null, null);
+        return;
       }
+
+      // Nao sobrescreve uma sessao local (mock) com o estado "sem sessao" do Supabase real.
+      // Contas mock nunca existem de verdade no Supabase, entao o listener sempre reporta null.
+      const isLocalSession = session.value?.access_token === 'local-token';
+      if (isLocalSession) {
+        return;
+      }
+
+      persistSession(null, null);
     });
 
     initialized.value = true;
