@@ -160,7 +160,8 @@ const handleLogout = async () => {
 
 .home-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  justify-items: center;
   gap: 1.25rem;
 }
 
@@ -168,6 +169,8 @@ const handleLogout = async () => {
   cursor: pointer;
   border-radius: 24px;
   padding: 0.2rem;
+  max-width: 420px;
+  width: 100%;
 }
 
 .feature-card p {

@@ -170,7 +170,7 @@ router.beforeEach(async (to) => {
   }
 
   const isPublicRoute = to.path === '/' || to.path === '/login' || to.path === '/register' || to.path === '/forgot-password'
-  const isPrivateRoute = to.path.startsWith('/admin') || to.path.startsWith('/garcom')
+  const isPrivateRoute = to.path.startsWith('/admin') || to.path.startsWith('/garcom') || to.path === '/home'
   const isAdminRoute = to.path.startsWith('/admin')
   const isAuthRoute = to.path === '/home'
 
