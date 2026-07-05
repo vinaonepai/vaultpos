@@ -8,8 +8,11 @@ declare module 'ionicons/icons' {
   export const receiptOutline: string
   export const settingsOutline: string
   export const appsOutline: string
+  export const addOutline: string
+  export const alertCircleOutline: string
   export const businessOutline: string
   export const chevronForwardOutline: string
   export const peopleOutline: string
+  export const qrCodeOutline: string
   export const statsChartOutline: string
 }

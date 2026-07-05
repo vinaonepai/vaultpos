@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { useUserStore } from './user.store'
-import { getProdutos } from '@/supabase/queries/produtos'
-import { getCategorias } from '@/supabase/queries/categorias'
+import { createProduto, deleteProduto, getProdutos, updateProduto } from '@/supabase/queries/produtos'
+import { createCategoria, getCategorias } from '@/supabase/queries/categorias'
 import { getMovimentacoes, movimentarEstoque } from '@/supabase/queries/estoque'
+import type { CreateProduto, UpdateProduto } from '@/types/database.types'
 
 export const useEstoqueStore = defineStore('estoque', () => {
   // State
@@ -99,6 +100,89 @@ export const useEstoqueStore = defineStore('estoque', () => {
     }
   }
 
+  // Criar produto
+  async function criarProduto(dados: Omit<CreateProduto, 'empresa_id'>) {
+    const userStore = useUserStore()
+    if (!userStore.empresaId) {
+      const err = new Error('Empresa nao encontrada')
+      error.value = err.message
+      throw err
+    }
+
+    loading.value = true
+    error.value = null
+    try {
+      await createProduto({
+        empresa_id: userStore.empresaId,
+        ...dados,
+      })
+      await fetchProdutos()
+    } catch (err: any) {
+      error.value = err.message
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  // Editar produto
+  async function editarProduto(id: string, dados: UpdateProduto) {
+    loading.value = true
+    error.value = null
+    try {
+      await updateProduto(id, dados)
+      await fetchProdutos()
+    } catch (err: any) {
+      error.value = err.message
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  // Desativar produto
+  async function desativarProduto(id: string) {
+    loading.value = true
+    error.value = null
+    try {
+      await deleteProduto(id)
+      await fetchProdutos()
+    } catch (err: any) {
+      error.value = err.message
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  // Criar categoria
+  async function criarCategoria(nome: string) {
+    const userStore = useUserStore()
+    if (!userStore.empresaId) {
+      const err = new Error('Empresa nao encontrada')
+      error.value = err.message
+      throw err
+    }
+
+    loading.value = true
+    error.value = null
+    try {
+      const categoria = await createCategoria({
+        empresa_id: userStore.empresaId,
+        nome,
+        descricao: null,
+        ativo: true,
+      })
+      await fetchCategorias()
+      return categoria
+    } catch (err: any) {
+      error.value = err.message
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     // State
     produtos,
@@ -116,5 +200,9 @@ export const useEstoqueStore = defineStore('estoque', () => {
     fetchCategorias,
     fetchMovimentacoes,
     registrarMovimentacao,
+    criarProduto,
+    editarProduto,
+    desativarProduto,
+    criarCategoria,
   }
 })

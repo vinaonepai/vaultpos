@@ -63,7 +63,7 @@
               >
                 <ion-card-header>
                   <div class="metric-title">
-                    <ion-icon :icon="personCircleOutline" />
+                    <ion-icon :icon="alertCircleOutline" />
 
                     <span>Estoque Baixo</span>
                   </div>
@@ -98,7 +98,7 @@
             <div class="method-list">
               <div class="method-row">
                 <div class="method-left">
-                  <ion-icon :icon="cubeOutline" class="method-icon" />
+                  <ion-icon :icon="qrCodeOutline" class="method-icon" />
 
                   <div>
                     <div class="method-name">Pix</div>
@@ -224,11 +224,10 @@ import {
 import {
   receiptOutline,
   cubeOutline,
-  personCircleOutline,
+  alertCircleOutline,
   cashOutline,
-
+  qrCodeOutline,
   cardOutline,
-
 } from 'ionicons/icons'
 
 import { useUserStore } from '@/stores/user.store'
