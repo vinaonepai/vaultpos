@@ -75,7 +75,6 @@ ion-content {
 }
 
 ion-page {
-  position: relative;
   z-index: 1;
 }
 

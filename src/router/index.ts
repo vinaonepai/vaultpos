@@ -190,7 +190,12 @@ router.beforeEach(async (to) => {
   if (auth.isAuthenticated) {
     const userStore = useUserStore()
     if (!userStore.usuario) {
-      await userStore.fetchUsuarioLogado()
+      const timeout = new Promise((resolve) => setTimeout(resolve, 5000))
+      try {
+        await Promise.race([userStore.fetchUsuarioLogado(), timeout])
+      } catch (err) {
+        console.error('Erro ao carregar dados do usuário:', err)
+      }
     }
   }
 
